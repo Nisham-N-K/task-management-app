@@ -3,18 +3,24 @@
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
-export default function HomePage() {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("/api/auth/login", { email, password });
-      alert("Login successful");
-    } catch (error) {
-      alert("Login failed");
+      const response = await axios.post("/api/auth/login", { email, password });
+
+      if (response.status === 200) {
+        toast.success("Login successful");
+        // Optionally redirect user after login, e.g., to /dashboard
+      }
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || "Login failed";
+      toast.error(msg);
     }
   };
 
@@ -22,8 +28,6 @@ export default function HomePage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100">
       <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-6">Oryx University</h1>
-        <p className="text-center text-gray-600 mb-6">Organize your work, achieve your goals</p>
-
         <h2 className="text-xl font-semibold mb-4 text-center">Welcome back</h2>
         <p className="text-center text-gray-500 mb-6">Sign in to your account</p>
 

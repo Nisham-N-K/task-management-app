@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -11,10 +12,15 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("/api/auth/login", { email, password });
-      alert("Login successful");
-    } catch (error) {
-      alert("Login failed");
+      const response = await axios.post("/api/auth/login", { email, password });
+
+      if (response.status === 200) {
+        toast.success("Login successful");
+        // Optionally redirect user after login, e.g., to /dashboard
+      }
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || "Login failed";
+      toast.error(msg);
     }
   };
 

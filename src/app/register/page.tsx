@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -11,11 +12,16 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      await axios.post("/api/auth/register", { username, email, password });
-      alert("Registration successful");
-    } catch (error) {
-      alert("Registration failed");
+      const response = await axios.post("/api/auth/register", { username, email, password });
+
+      if (response.status === 201) {
+        toast.success("Registration successful");
+      }
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || "Registration failed";
+      toast.error(msg);
     }
   };
 
