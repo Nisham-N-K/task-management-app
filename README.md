@@ -35,6 +35,3 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 =======
-# task-management-app
-Fullstack Task Manager built with Next.js, TypeScript, Tailwind CSS, MongoDB
->>>>>>> ac157e8a26f41764fb738cb566e53f7e72a84834
