@@ -21,9 +21,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100">
       <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-6">TaskFlow</h1>
-        <p className="text-center text-gray-600 mb-6">Organize your work, achieve your goals</p>
-
+        <h1 className="text-3xl font-bold text-center mb-6">Oryx University</h1>
         <h2 className="text-xl font-semibold mb-4 text-center">Welcome back</h2>
         <p className="text-center text-gray-500 mb-6">Sign in to your account</p>
 
