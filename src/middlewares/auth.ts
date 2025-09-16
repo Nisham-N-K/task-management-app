@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export function authMiddleware(handler: Function) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     const token = req.cookies.token;
