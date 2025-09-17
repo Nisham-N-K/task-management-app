@@ -1,15 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import bcrypt from "bcrypt";
 
-export async function POST(req: NextRequest) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   await connectDB();
-  const { username, email, password } = await req.json();
+
+  const { username, email, password } = req.body;
 
   const existingUser = await User.findOne({ email });
+
   if (existingUser) {
-    return NextResponse.json({ message: "User already exists" }, { status: 400 });
+    return res.status(400).json({ message: "User already exists" });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -17,5 +22,5 @@ export async function POST(req: NextRequest) {
   const user = new User({ username, email, password: hashedPassword });
   await user.save();
 
-  return NextResponse.json({ message: "User created successfully" }, { status: 201 });
+  return res.status(201).json({ message: "User created successfully" });
 }
