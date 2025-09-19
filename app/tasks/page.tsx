@@ -123,28 +123,36 @@ export default function TasksPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">Task Manager</h1>
-              <p className="text-sm text-gray-600">Welcome back, {user.name}</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link href="/tasks/create">
-                <Button className="flex items-center gap-2">
-                  <Plus className="h-4 w-4" />
-                  New Task
-                </Button>
-              </Link>
-              <Button variant="outline" onClick={handleLogout} className="flex items-center gap-2 bg-transparent">
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
+<div className="shadow-sm border-b">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 py-3">
+      
+      {/* Left side */}
+      <div>
+        <h1 className="text-xl font-semibold text-gray-900">Task Manager</h1>
+        <p className="text-sm text-gray-600">Welcome back, {user.name}</p>
       </div>
+
+      {/* Right side */}
+      <div className="flex items-center gap-3">
+        <Link href="/tasks/create">
+          <Button className="flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            New Task
+          </Button>
+        </Link>
+        <Button
+          variant="outline"
+          onClick={handleLogout}
+          className="flex items-center gap-2 bg-transparent"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </Button>
+      </div>
+    </div>
+  </div>
+</div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats */}
