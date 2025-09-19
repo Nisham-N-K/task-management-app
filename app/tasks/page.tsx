@@ -124,36 +124,39 @@ export default function TasksPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
 <div className="shadow-sm border-b">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 py-3">
+  <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div className="flex justify-between items-center py-2 sm:py-3 flex-nowrap">
       
       {/* Left side */}
-      <div>
-        <h1 className="text-xl font-semibold text-gray-900">Task Manager</h1>
-        <p className="text-sm text-gray-600">Welcome back, {user.name}</p>
+      <div className="min-w-0">
+        <h1 className="text-lg sm:text-xl font-semibold text-gray-900 truncate">
+          Task Manager
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 truncate">
+          Welcome back, {user.name}
+        </p>
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
         <Link href="/tasks/create">
-          <Button className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
+          <Button className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2">
+            <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             New Task
           </Button>
         </Link>
         <Button
           variant="outline"
           onClick={handleLogout}
-          className="flex items-center gap-2 bg-transparent"
+          className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 bg-transparent"
         >
-          <LogOut className="h-4 w-4" />
+          <LogOut className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           Logout
         </Button>
       </div>
     </div>
   </div>
 </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -267,7 +270,7 @@ export default function TasksPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 ml-4">
+                    <div className="items-center gap-2">
                       <Link href={`/tasks/create?edit=${task.id}`}>
                         <Button variant="ghost" size="sm">
                           <Edit className="h-4 w-4" />
