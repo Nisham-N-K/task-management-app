@@ -4,10 +4,13 @@ import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
+  
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +19,7 @@ export default function LoginPage() {
 
       if (response.status === 200) {
         toast.success("Login successful");
-        // Optionally redirect user after login, e.g., to /dashboard
+       router.push("/dashboard");
       }
     } catch (error: any) {
       const msg = error?.response?.data?.message || "Login failed";

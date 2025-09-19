@@ -1,34 +1,99 @@
+// src/app/dashboard/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 interface Task {
   _id: string;
   title: string;
   description: string;
+  priority: "Low" | "Medium" | "High";
   dueDate: string;
-  priority: string;
 }
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(false);
 
+  // Fetch tasks
   useEffect(() => {
-    axios.get("/api/tasks").then((res) => setTasks(res.data));
+    const fetchTasks = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get("/api/tasks/list");
+        setTasks(res.data.tasks);
+      } catch (error) {
+        console.error("Error fetching tasks", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTasks();
   }, []);
 
+  // Delete a task
+  const deleteTask = async (id: string) => {
+    try {
+      await axios.delete(`/api/tasks/delete?id=${id}`);
+      setTasks(tasks.filter((task) => task._id !== id));
+    } catch (error) {
+      console.error("Error deleting task", error);
+    }
+  };
+
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Your Tasks</h1>
-      {tasks.map((task) => (
-        <div key={task._id} className="p-4 border rounded mb-3">
-          <h2 className="font-semibold">{task.title}</h2>
-          <p>{task.description}</p>
-          <p>Due: {new Date(task.dueDate).toLocaleDateString()}</p>
-          <p>Priority: {task.priority}</p>
-        </div>
-      ))}
+    <div className="min-h-screen bg-gray-100 p-8">
+      <h1 className="text-2xl font-bold mb-6">📋 Task Dashboard</h1>
+
+      {/* Add Task Button */}
+      <div className="mb-4">
+        <a
+          href="/dashboard/create"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          ➕ Add Task
+        </a>
+      </div>
+
+      {/* Task List */}
+      {loading ? (
+        <p>Loading tasks...</p>
+      ) : tasks.length === 0 ? (
+        <p>No tasks found. Start by adding one!</p>
+      ) : (
+        <ul className="space-y-4">
+          {tasks.map((task) => (
+            <li
+              key={task._id}
+              className="bg-white p-4 rounded shadow flex justify-between items-center"
+            >
+              <div>
+                <h2 className="font-semibold">{task.title}</h2>
+                <p className="text-sm text-gray-600">{task.description}</p>
+                <p className="text-sm">
+                  Priority: <b>{task.priority}</b> | Due:{" "}
+                  {new Date(task.dueDate).toLocaleDateString()}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <a
+                  href={`/dashboard/edit/${task._id}`}
+                  className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                >
+                  ✏️ Edit
+                </a>
+                <button
+                  onClick={() => deleteTask(task._id)}
+                  className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                >
+                  🗑 Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

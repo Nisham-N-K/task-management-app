@@ -9,5 +9,5 @@ if (!MONGODB_URI) {
 export async function connectDB() {
   if (mongoose.connection.readyState >= 1) return;
 
-  return mongoose.connect(MONGODB_URI);
+  return mongoose.connect(MONGODB_URI!);
 }
