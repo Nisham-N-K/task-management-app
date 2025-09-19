@@ -6,9 +6,9 @@ import './globals.css'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'Task Management App',
+  description: 'Created by Nisham',
+  generator: 'Next.js',
 }
 
 export default function RootLayout({
