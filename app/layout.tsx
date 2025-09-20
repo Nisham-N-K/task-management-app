@@ -11,14 +11,10 @@ export const metadata: Metadata = {
   generator: 'Next.js',
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className={`font-sans ${GeistSans?.variable ?? ''} ${GeistMono?.variable ?? ''}`}>
         {children}
         <Analytics />
         <SpeedInsights />
