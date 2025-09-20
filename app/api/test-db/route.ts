@@ -1,9 +1,9 @@
 // app/api/test-db/route.ts
 
-import { connectDB } from '../lib/mongodb';
+import { connectDB } from '../../../lib/mongodb';
 import { NextResponse } from 'next/server';
-import User from '../models/User'; // Import your User model
-import Task from '../models/Task'; // Import your Task model
+import User from '../../../models/User'; // Import your User model
+import Task from '../../../models/Task'; // Import your Task model
 
 export async function GET() {
   try {

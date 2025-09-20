@@ -35,7 +35,7 @@ export default function TasksPage() {
     // Check authentication
     const currentUser = localStorage.getItem("currentUser")
     if (!currentUser) {
-      router.push("/login")
+      router.push("/auth/login")
       return
     }
 
@@ -74,7 +74,7 @@ export default function TasksPage() {
 
   const handleLogout = () => {
     localStorage.removeItem("currentUser")
-    router.push("/login")
+    router.push("/auth/login")
   }
 
   const toggleTaskStatus = (taskId: string) => {

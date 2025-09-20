@@ -11,37 +11,60 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
-export default function LoginPage() {
+export default function RegisterPage() {
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError("")
 
     try {
-      // Simple validation
-      if (!email || !password) {
+      // Validation
+      if (!name || !email || !password || !confirmPassword) {
         setError("Please fill in all fields")
         return
       }
 
-      // Simulate login - in real app, this would call your API
-      const users = JSON.parse(localStorage.getItem("users") || "[]")
-      const user = users.find((u: any) => u.email === email && u.password === password)
-
-      if (user) {
-        localStorage.setItem("currentUser", JSON.stringify(user))
-        router.push("/tasks")
-      } else {
-        setError("Invalid email or password")
+      if (password !== confirmPassword) {
+        setError("Passwords do not match")
+        return
       }
+
+      if (password.length < 6) {
+        setError("Password must be at least 6 characters")
+        return
+      }
+
+      // Check if user already exists
+      const users = JSON.parse(localStorage.getItem("users") || "[]")
+      if (users.find((u: any) => u.email === email)) {
+        setError("User with this email already exists")
+        return
+      }
+
+      // Create new user
+      const newUser = {
+        id: Date.now().toString(),
+        name,
+        email,
+        password,
+        createdAt: new Date().toISOString(),
+      }
+
+      users.push(newUser)
+      localStorage.setItem("users", JSON.stringify(users))
+      localStorage.setItem("currentUser", JSON.stringify(newUser))
+
+      router.push("/tasks")
     } catch (err) {
-      setError("Login failed. Please try again.")
+      setError("Registration failed. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -51,16 +74,28 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-gray-900">Welcome Back</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+          <CardTitle className="text-2xl font-bold text-gray-900">Create Account</CardTitle>
+          <CardDescription>Sign up to start managing your tasks</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleRegister} className="space-y-4">
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
+
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Enter your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -86,16 +121,28 @@ export default function LoginPage() {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
+
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <Link href="/register" className="text-blue-600 hover:text-blue-500 font-medium">
-                Sign up
+              Already have an account?{" "}
+              <Link href="/auth/login" className="text-blue-600 hover:text-blue-500 font-medium">
+                Sign in
               </Link>
             </p>
           </div>

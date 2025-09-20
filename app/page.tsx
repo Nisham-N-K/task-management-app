@@ -11,7 +11,7 @@ export default function Home() {
     if (currentUser) {
       router.push("/tasks")
     } else {
-      router.push("/login")
+      router.push("/auth/login")
     }
   }, [router])
 
