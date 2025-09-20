@@ -43,7 +43,7 @@ export default function CreateTaskPage() {
     // Check authentication
     const currentUser = localStorage.getItem("currentUser")
     if (!currentUser) {
-      router.push("/login")
+      router.push("/auth/login")
       return
     }
 
