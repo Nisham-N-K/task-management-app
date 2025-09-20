@@ -28,11 +28,10 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const user = await User.create({
-      id: Date.now().toString(),
       name,
       email,
       password: hashedPassword,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(),
     })
 
     const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, { expiresIn: "7d" })
