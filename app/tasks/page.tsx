@@ -46,7 +46,7 @@ export default function TasksPage() {
     
     async function fetchUserTasks() {
       try {
-        const res = await fetch("/api/auth/tasks", {
+        const res = await fetch("/api/tasks", {
           headers: {
             "Authorization": `Bearer ${token}`,
           },
@@ -62,7 +62,7 @@ export default function TasksPage() {
         
       } catch (error) {
         console.error("Error fetching tasks:", error)
-        // You might want to redirect to login on failure
+        // Redirect to login on failure
         router.push("/auth/login");
       }
     }
@@ -93,8 +93,8 @@ export default function TasksPage() {
   }, [tasks, searchTerm, statusFilter, priorityFilter])
 
   const handleLogout = () => {
-    localStorage.removeItem("token") // Remove the token
-    localStorage.removeItem("currentUser") // Optional: remove user info
+    localStorage.removeItem("token")
+    localStorage.removeItem("currentUser")
     router.push("/auth/login")
   }
 
@@ -106,7 +106,7 @@ export default function TasksPage() {
     const token = localStorage.getItem("token");
     
     try {
-      const res = await fetch(`/api/auth/tasks/${taskId}/status`, {
+      const res = await fetch(`/api/tasks/${taskId}/status`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -134,7 +134,7 @@ export default function TasksPage() {
     const token = localStorage.getItem("token");
     
     try {
-      const res = await fetch(`/api/auth/tasks/${taskId}`, {
+      const res = await fetch(`/api/tasks/${taskId}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`,

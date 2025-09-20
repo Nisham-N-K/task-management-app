@@ -51,7 +51,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-gray-900">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl font-bold text-gray-900">Welcome Backlll</CardTitle>
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent>
@@ -94,7 +94,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link href="/auth/register" className="text-blue-600 hover:text-blue-500 font-medium">
+              <Link href="/register" className="text-blue-600 hover:text-blue-500 font-medium">
                 Sign up
               </Link>
             </p>
