@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Plus, Search, LogOut, Edit, Trash2 } from "lucide-react"
 
 interface Task {
-  id: string
+  _id: string
   title: string
   description: string
   priority: "low" | "medium" | "high"
@@ -32,25 +32,45 @@ export default function TasksPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication and fetch tasks
     const currentUser = localStorage.getItem("currentUser")
-    if (!currentUser) {
-      router.push("/login")
+    const token = localStorage.getItem("token");
+
+    if (!currentUser || !token) {
+      router.push("/auth/login")
       return
     }
-
-    const userData = JSON.parse(currentUser)
-    setUser(userData)
-
-    // Load tasks
-    const allTasks = JSON.parse(localStorage.getItem("tasks") || "[]")
-    const userTasks = allTasks.filter((task: Task) => task.userId === userData.id)
-    setTasks(userTasks)
-    setFilteredTasks(userTasks)
+    
+    // Parse the user data (assuming it's a JSON string)
+    setUser(JSON.parse(currentUser))
+    
+    async function fetchUserTasks() {
+      try {
+        const res = await fetch("/api/auth/tasks", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        })
+        
+        if (!res.ok) {
+          throw new Error("Failed to fetch tasks")
+        }
+        
+        const data = await res.json()
+        setTasks(data.tasks)
+        setFilteredTasks(data.tasks)
+        
+      } catch (error) {
+        console.error("Error fetching tasks:", error)
+        // You might want to redirect to login on failure
+        router.push("/auth/login");
+      }
+    }
+    fetchUserTasks()
   }, [router])
 
   useEffect(() => {
-    // Filter tasks
+    // Filter tasks on the client side
     let filtered = tasks
 
     if (searchTerm) {
@@ -73,33 +93,64 @@ export default function TasksPage() {
   }, [tasks, searchTerm, statusFilter, priorityFilter])
 
   const handleLogout = () => {
-    localStorage.removeItem("currentUser")
-    router.push("/login")
+    localStorage.removeItem("token") // Remove the token
+    localStorage.removeItem("currentUser") // Optional: remove user info
+    router.push("/auth/login")
   }
 
-  const toggleTaskStatus = (taskId: string) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === taskId ? { ...task, status: task.status === "pending" ? "completed" : "pending" } : task,
-    )
-    setTasks(updatedTasks)
+  const toggleTaskStatus = async (taskId: string) => {
+    const taskToUpdate = tasks.find(task => task._id === taskId);
+    if (!taskToUpdate) return;
+    
+    const newStatus = taskToUpdate.status === "pending" ? "completed" : "pending";
+    const token = localStorage.getItem("token");
+    
+    try {
+      const res = await fetch(`/api/auth/tasks/${taskId}/status`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      
+      if (res.ok) {
+        const updatedTask = await res.json();
+        const updatedTasks = tasks.map(task => 
+          task._id === taskId ? updatedTask.task : task
+        );
+        setTasks(updatedTasks);
+      } else {
+        const errorData = await res.json();
+        console.error("Failed to toggle status:", errorData.message);
+      }
+    } catch (error) {
+      console.error("Error toggling status:", error);
+    }
+  };
 
-    // Update localStorage
-    const allTasks = JSON.parse(localStorage.getItem("tasks") || "[]")
-    const updatedAllTasks = allTasks.map((task: Task) =>
-      task.id === taskId ? { ...task, status: task.status === "pending" ? "completed" : "pending" } : task,
-    )
-    localStorage.setItem("tasks", JSON.stringify(updatedAllTasks))
-  }
-
-  const deleteTask = (taskId: string) => {
-    const updatedTasks = tasks.filter((task) => task.id !== taskId)
-    setTasks(updatedTasks)
-
-    // Update localStorage
-    const allTasks = JSON.parse(localStorage.getItem("tasks") || "[]")
-    const updatedAllTasks = allTasks.filter((task: Task) => task.id !== taskId)
-    localStorage.setItem("tasks", JSON.stringify(updatedAllTasks))
-  }
+  const deleteTask = async (taskId: string) => {
+    const token = localStorage.getItem("token");
+    
+    try {
+      const res = await fetch(`/api/auth/tasks/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      
+      if (res.ok) {
+        setTasks(tasks.filter(task => task._id !== taskId));
+      } else {
+        const errorData = await res.json();
+        console.error("Failed to delete task:", errorData.message);
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -245,13 +296,13 @@ export default function TasksPage() {
             </Card>
           ) : (
             filteredTasks.map((task) => (
-              <Card key={task.id} className="hover:shadow-md transition-shadow">
+              <Card key={task._id} className="hover:shadow-md transition-shadow">
                 <CardContent className="pt-6">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3 flex-1">
                       <Checkbox
                         checked={task.status === "completed"}
-                        onCheckedChange={() => toggleTaskStatus(task.id)}
+                        onCheckedChange={() => toggleTaskStatus(task._id)}
                         className="mt-1"
                       />
                       <div className="flex-1">
@@ -271,7 +322,7 @@ export default function TasksPage() {
                       </div>
                     </div>
                     <div className="items-center gap-2">
-                      <Link href={`/tasks/create?edit=${task.id}`}>
+                      <Link href={`/tasks/create?edit=${task._id}`}>
                         <Button variant="ghost" size="sm">
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -279,7 +330,7 @@ export default function TasksPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => deleteTask(task.id)}
+                        onClick={() => deleteTask(task._id)}
                         className="text-red-600 hover:text-red-700"
                       >
                         <Trash2 className="h-4 w-4" />
