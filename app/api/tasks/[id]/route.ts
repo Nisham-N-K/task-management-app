@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { connectDB } from "@/lib/mongodb";
-import Task from "@/models/Task";
+import { connectDB } from "@/app/api/lib/mongodb";
+import Task from "@/app/api/models/Task";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
