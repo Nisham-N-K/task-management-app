@@ -24,7 +24,7 @@ A full-stack task management application where users can register, log in, and m
 
 ### 🌐 Hosting & Repository
 
-- **Live Demo**: [Vercel Deployment](https://task-management-app-t3wu-1j8u5a3vt.vercel.app/)
+- **Live Demo**: [Vercel Deployment](https://task-management-app-t3wu.vercel.app)
 - **Source Code**: [GitHub Repository](https://github.com/Nisham-N-K/task-management-app)
 
 ---
