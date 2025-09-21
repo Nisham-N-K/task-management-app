@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -24,13 +23,11 @@ export default function LoginPage() {
     setError("")
 
     try {
-      // Simple validation
       if (!email || !password) {
         setError("Please fill in all fields")
         return
       }
 
-      // Simulate login - in real app, this would call your API
       const users = JSON.parse(localStorage.getItem("users") || "[]")
       const user = users.find((u: any) => u.email === email && u.password === password)
 

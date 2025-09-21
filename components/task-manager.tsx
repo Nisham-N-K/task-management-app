@@ -38,19 +38,16 @@ export function TaskManager() {
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [priorityFilter, setPriorityFilter] = useState<string>("all")
 
-  // Auth form states
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
 
-  // Task form states
   const [taskTitle, setTaskTitle] = useState("")
   const [taskDescription, setTaskDescription] = useState("")
   const [taskPriority, setTaskPriority] = useState<"low" | "medium" | "high">("medium")
   const [taskDueDate, setTaskDueDate] = useState("")
 
   useEffect(() => {
-    // Load user and tasks from localStorage
     const savedUser = localStorage.getItem("taskManager_user")
     const savedTasks = localStorage.getItem("taskManager_tasks")
 
@@ -63,7 +60,6 @@ export function TaskManager() {
   }, [])
 
   useEffect(() => {
-    // Save tasks to localStorage whenever tasks change
     if (tasks.length > 0) {
       localStorage.setItem("taskManager_tasks", JSON.stringify(tasks))
     }
@@ -73,18 +69,15 @@ export function TaskManager() {
     e.preventDefault()
 
     if (isLogin) {
-      // Simple login - in real app, validate against backend
       const userData = { id: "1", name: email.split("@")[0], email }
       setUser(userData)
       localStorage.setItem("taskManager_user", JSON.stringify(userData))
     } else {
-      // Simple register
       const userData = { id: "1", name, email }
       setUser(userData)
       localStorage.setItem("taskManager_user", JSON.stringify(userData))
     }
 
-    // Reset form
     setEmail("")
     setPassword("")
     setName("")
@@ -99,7 +92,6 @@ export function TaskManager() {
     e.preventDefault()
 
     if (editingTask) {
-      // Update existing task
       setTasks(
         tasks.map((task) =>
           task.id === editingTask.id
@@ -109,7 +101,6 @@ export function TaskManager() {
       )
       setEditingTask(null)
     } else {
-      // Create new task
       const newTask: Task = {
         id: Date.now().toString(),
         title: taskTitle,
@@ -122,7 +113,6 @@ export function TaskManager() {
       setTasks([...tasks, newTask])
     }
 
-    // Reset form
     setTaskTitle("")
     setTaskDescription("")
     setTaskPriority("medium")
@@ -268,7 +258,6 @@ export function TaskManager() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -286,7 +275,6 @@ export function TaskManager() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardContent className="p-6">
@@ -351,7 +339,6 @@ export function TaskManager() {
           </Card>
         </div>
 
-        {/* Controls */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex-1">
             <div className="relative">
@@ -397,7 +384,6 @@ export function TaskManager() {
           </div>
         </div>
 
-        {/* Task Form Modal */}
         {showTaskForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <Card className="w-full max-w-md">
@@ -480,7 +466,6 @@ export function TaskManager() {
           </div>
         )}
 
-        {/* Tasks Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTasks.map((task) => (
             <Card key={task.id} className="hover:shadow-lg transition-shadow">

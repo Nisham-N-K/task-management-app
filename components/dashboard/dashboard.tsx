@@ -205,7 +205,6 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -222,7 +221,6 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardContent className="p-6">
@@ -281,7 +279,6 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
           </Card>
         </div>
 
-        {/* Actions and Filters */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <Button onClick={() => setShowTaskForm(true)}>
             <Plus className="h-4 w-4 mr-2" />
@@ -290,7 +287,6 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
           <TaskFilters filters={filters} onFiltersChange={setFilters} />
         </div>
 
-        {/* Task Form Modal */}
         {(showTaskForm || editingTask) && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
@@ -306,7 +302,6 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
           </div>
         )}
 
-        {/* Tasks List */}
         <div className="space-y-4">
           {filteredTasks.length === 0 ? (
             <Card>
