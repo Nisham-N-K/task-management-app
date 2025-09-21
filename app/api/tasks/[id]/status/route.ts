@@ -1,7 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 
-// In-memory task storage (same as tasks/route.ts)
 const tasks: any[] = []
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"
@@ -34,7 +33,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       return NextResponse.json({ message: "Task not found" }, { status: 404 })
     }
 
-    // Update task status
     tasks[taskIndex] = {
       ...tasks[taskIndex],
       status,

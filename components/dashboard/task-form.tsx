@@ -35,7 +35,7 @@ export function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
     if (task) {
       setTitle(task.title)
       setDescription(task.description)
-      setDueDate(task.dueDate.split("T")[0]) // Format for date input
+      setDueDate(task.dueDate.split("T")[0])
       setPriority(task.priority)
     }
   }, [task])

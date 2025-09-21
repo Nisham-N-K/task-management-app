@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -26,7 +25,6 @@ export default function RegisterPage() {
     setError("")
 
     try {
-      // Validation
       if (!name || !email || !password || !confirmPassword) {
         setError("Please fill in all fields")
         return
@@ -42,14 +40,12 @@ export default function RegisterPage() {
         return
       }
 
-      // Check if user already exists
       const users = JSON.parse(localStorage.getItem("users") || "[]")
       if (users.find((u: any) => u.email === email)) {
         setError("User with this email already exists")
         return
       }
 
-      // Create new user
       const newUser = {
         id: Date.now().toString(),
         name,
