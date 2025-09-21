@@ -53,8 +53,11 @@ Create a `.env.local` file in the root directory:
 ```env
 MONGODB_URI=mongodb://localhost:27017/taskmanager
 # Or MongoDB Atlas:
-MONGODB_URI=mongodb+srv://nishamstarkfins_db_user:vyFBxlmvW8WzP8Fp@cluster1.nrjfvc5.mongodb.net/trsk_management_app?retryWrites=true&w=majority&appName=Cluster1
-JWT_SECRET=mySuperSecretJWTKey
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster1.mongodb.net/taskmanager?retryWrites=true&w=majority
+
+
+# JWT Secret
+JWT_SECRET=yourSuperSecretJWTKey
 
 ```
 
